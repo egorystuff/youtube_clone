@@ -1,6 +1,8 @@
 <template>
   <a class="mb-7 group" href="#">
-    <div class="relative">
+    <VideoItemThumbnail :index="index" />
+
+    <!-- <div class="relative">
       <img :src="`https://loremflickr.com/720/404?random=${index}`" alt="" />
       <span
         class="transition opacity-0 group-hover:opacity-100 bg-opacity-60 absolute top-0 right-0 bg-black text-white rounded-sm m-1 p-1">
@@ -24,7 +26,7 @@
         class="absolute group-hover:opacity-0 duration-500 bg-opacity-60 bottom-0 right-0 bg-black text-white rounded-sm m-1 p-1 text-xs font-semibold"
         >6:35</span
       >
-    </div>
+    </div> -->
 
     <div class="flex items-start mt-3">
       <img :src="`https://loremflickr.com/68/68?random=${index}`" class="mr-3 rounded-full w-9 h-9" alt="" />
@@ -56,7 +58,13 @@
 </template>
 
 <script>
+import VideoItemThumbnail from "./VideoItemThumbnail.vue";
+
 export default {
+  components: {
+    VideoItemThumbnail,
+  },
+
   props: ["index"],
 };
 </script>
