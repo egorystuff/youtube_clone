@@ -1,8 +1,8 @@
 <template>
   <TheHeader />
-  <TheSidebarSmall />
+  <!-- <TheSidebarSmall /> -->
   <TheSidebar />
-  <TheSidebarMobile />
+  <!-- <TheSidebarMobile /> -->
   <TheCategories />
   <TheVideos />
 </template>
