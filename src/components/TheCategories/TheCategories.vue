@@ -1,5 +1,5 @@
 <template>
-  <section class="pt-14 md:pl-24 xl:pl-64 fixed w-full bg-white bg-opacity-95 z-10">
+  <section :class="classes">
     <div class="border-t border-b">
       <div class="px-4 py-3 flex space-x-3 overflow-x-auto text-sm whitespace-nowrap max-w-screen-2xl m-auto">
         <CategoryItem
@@ -45,6 +45,24 @@ export default {
         "Programming",
       ],
     };
+  },
+
+  props: {
+    isSidebarOpen: Boolean,
+  },
+
+  computed: {
+    classes() {
+      return [
+        this.isSidebarOpen ? "xl:pl-64" : "md:pl-24",
+        "pt-14",
+        "w-full",
+        "fixed",
+        "bg-white",
+        "bg-opacity-95",
+        "z-10",
+      ];
+    },
   },
 };
 </script>

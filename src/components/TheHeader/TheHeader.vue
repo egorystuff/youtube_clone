@@ -1,10 +1,10 @@
 <template>
   <header class="flex justify-between fixed z-30 w-full">
     <!-- left -->
-    <div class="lg:w-1/4 flex items-center">
+    <div class="lg:w-1/4 flex">
       <div class="flex items-center xl:w-64 xl:bg-white pl-4">
         <button class="mr-3 sm:ml-2 sm:mr-6 focus:outline-none">
-          <BaseIcon name="menu" />
+          <BaseIcon @click="$emit('toggleSidebar')" name="menu" />
         </button>
         <LogoMain />
       </div>
@@ -60,6 +60,10 @@ export default {
     TheDropdownSettings,
     ButtonLogin,
     BaseIcon,
+  },
+
+  emits: {
+    toggleSidebar: null,
   },
 };
 </script>
