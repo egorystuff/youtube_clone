@@ -1,15 +1,15 @@
 <template>
   <TheHeader @toggle-sidebar="toggleSidebar" />
-  <TheSidebarSmall :is-open="sidebarState === 'compact'" />
-  <TheSidebar :is-open="sidebarState === 'normal'" />
+  <TheSidebarCompact v-if="isCompactSidebarOpen" />
+  <TheSidebar v-if="isSidebarOpen" />
   <TheSidebarMobile :is-open="isMobileSidebarOpen" @close="closeMobileSidebar" />
-  <TheCategories :is-sidebar-open="sidebarState === 'normal'" />
-  <TheVideos :is-sidebar-open="sidebarState === 'normal'" />
+  <TheCategories :is-sidebar-open="isSidebarOpen" />
+  <TheVideos :is-sidebar-open="isSidebarOpen" />
 </template>
 
 <script>
 import TheHeader from "./components/TheHeader/TheHeader.vue";
-import TheSidebarSmall from "./components/TheSidebar/TheSidebarSmall.vue";
+import TheSidebarCompact from "./components/TheSidebar/TheSidebarCompact.vue";
 import TheSidebar from "./components/TheSidebar/TheSidebar.vue";
 import TheSidebarMobile from "./components/TheSidebar/TheSidebarMobile.vue";
 import TheCategories from "./components/TheCategories/TheCategories.vue";
@@ -18,7 +18,7 @@ import TheVideos from "./components/TheVideo/TheVideos.vue";
 export default {
   components: {
     TheHeader,
-    TheSidebarSmall,
+    TheSidebarCompact,
     TheSidebar,
     TheSidebarMobile,
     TheCategories,
@@ -28,19 +28,37 @@ export default {
   data() {
     return {
       isMobileSidebarOpen: false,
-      sidebarState: null, //normal | compact
+      isCompactSidebarOpen: false,
+      isSidebarOpen: false,
+      isCompactSidebarActive: null,
     };
   },
 
   mounted() {
-    if (window.innerWidth >= 768 && window.innerWidth < 1280) this.sidebarState = "compact";
-    if (window.innerWidth >= 1280) this.sidebarState = "normal";
+    if (window.innerWidth >= 768 && window.innerWidth < 1280) this.isCompactSidebarActive = true;
+    if (window.innerWidth >= 1280) this.isCompactSidebarActive = false;
+    this.onResize();
+    window.addEventListener("resize", this.onResize);
   },
 
   methods: {
+    onResize() {
+      if (window.innerWidth < 768) {
+        this.isCompactSidebarOpen = false;
+        this.isSidebarOpen = false;
+      } else if (window.innerWidth < 1280) {
+        this.isCompactSidebarOpen = true;
+        this.isSidebarOpen = false;
+      } else {
+        this.isCompactSidebarOpen = this.isCompactSidebarActive;
+        this.isSidebarOpen = !this.isCompactSidebarActive;
+      }
+    },
+
     toggleSidebar() {
       if (window.innerWidth >= 1280) {
-        this.sidebarState = this.sidebarState === "normal" ? "compact" : "normal";
+        this.isCompactSidebarActive = !this.isCompactSidebarActive;
+        this.onResize();
       } else {
         this.openMobileSidebar();
       }
