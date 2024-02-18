@@ -11,7 +11,12 @@
       leave-active-class="transition ease-in duration-75"
       leave-from-class="transform opacity-100 scale-100"
       leave-to-class="transition opacity-0 scale-95">
-      <div v-show="isOpen" class="absolute top-9 -right-full sm:right-0 bg-white w-72 border border-t-0 duration-500">
+      <div
+        v-show="isOpen"
+        ref="dropdownSetting"
+        @keydown.esc="isOpen = false"
+        tabindex="-1"
+        class="absolute top-9 -right-full sm:right-0 bg-white w-72 border border-t-0 duration-500">
         <section class="py-2 border-b">
           <ul>
             <DropdownSettingListIten
@@ -22,6 +27,7 @@
               :with-sub-menu="listItem.withSubMenu" />
           </ul>
         </section>
+
         <section class="py-2">
           <ul>
             <DropdownSettingListIten :label="listItems[8].label" :with-sub-menu="listItems[8].withSubMenu" />
@@ -57,6 +63,12 @@ export default {
         { label: "Restricted Mode: Off", icon: null, withSubMenu: true },
       ],
     };
+  },
+
+  watch: {
+    isOpen() {
+      this.$nextTick(() => this.isOpen && this.$refs.dropdownSetting.focus());
+    },
   },
 
   mounted() {

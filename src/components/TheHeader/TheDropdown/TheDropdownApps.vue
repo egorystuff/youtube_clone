@@ -11,7 +11,12 @@
       leave-active-class="transition ease-in duration-75"
       leave-from-class="transform opacity-100 scale-100"
       leave-to-class="transition opacity-0 scale-95">
-      <div v-show="isOpen" class="absolute top-9 right-0 sm:left-0 bg-white w-60 border border-t-0 duration-500">
+      <div
+        v-show="isOpen"
+        ref="dropdownApp"
+        @keydown.esc="isOpen = false"
+        tabindex="-1"
+        class="absolute top-9 right-0 sm:left-0 bg-white w-60 border border-t-0 duration-500 focus:outline-none">
         <section class="py-2">
           <ul>
             <DropdownListIten label="YahTube TV" />
@@ -50,6 +55,12 @@ export default {
     return {
       isOpen: false,
     };
+  },
+
+  watch: {
+    isOpen() {
+      this.$nextTick(() => this.isOpen && this.$refs.dropdownApp.focus());
+    },
   },
 
   mounted() {

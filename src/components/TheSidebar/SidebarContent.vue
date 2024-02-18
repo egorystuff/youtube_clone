@@ -15,7 +15,7 @@
   </SidebarSection>
 
   <SidebarSection class="px-8 py-4 font-medium leading-5 border-b">
-    <span class="text-sm"> Sign in to like videos, comment, and subscribe. </span>
+    <span class="text-sm"> Sign in to like videos, comment, and subscribe.</span>
     <ButtonLogin
       class="flex items-center px-3 py-1 mt-3 text-sm text-blue-700 uppercase border border-blue-700 rounded-full focus:outline-none" />
   </SidebarSection>
