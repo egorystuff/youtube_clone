@@ -1,8 +1,10 @@
 <template>
   <div class="relative">
-    <button @click="isOpen = !isOpen" class="relative p-2 focus:outline-none">
-      <BaseIcon name="dotsVertical" class="w-5 h-5" />
-    </button>
+    <BaseTooltip text="Settings">
+      <button @click="isOpen = !isOpen" class="relative p-2 focus:outline-none">
+        <BaseIcon name="dotsVertical" class="w-5 h-5" />
+      </button>
+    </BaseTooltip>
 
     <Transition
       enter-active-class="transition ease-out duration-100"
@@ -11,12 +13,7 @@
       leave-active-class="transition ease-in duration-75"
       leave-from-class="transform opacity-100 scale-100"
       leave-to-class="transition opacity-0 scale-95">
-      <div
-        v-show="isOpen"
-        ref="dropdownSetting"
-        @keydown.esc="isOpen = false"
-        tabindex="-1"
-        class="absolute top-9 -right-full sm:right-0 bg-white w-72 border border-t-0 duration-500">
+      <div v-show="isOpen" ref="dropdownSetting" @keydown.esc="isOpen = false" tabindex="-1" :class="dropdownClasses">
         <section class="py-2 border-b">
           <ul>
             <DropdownSettingListIten
@@ -41,11 +38,13 @@
 <script>
 import DropdownSettingListIten from "./DropdownSettingListIten.vue";
 import BaseIcon from "../../BaseIcon.vue";
+import BaseTooltip from "../../BaseTooltip.vue";
 
 export default {
   components: {
     DropdownSettingListIten,
     BaseIcon,
+    BaseTooltip,
   },
 
   data() {
@@ -77,6 +76,23 @@ export default {
         this.isOpen = false;
       }
     });
+  },
+
+  computed: {
+    dropdownClasses() {
+      return [
+        "absolute",
+        "top-9",
+        "z-10",
+        "-right-full",
+        "sm:right-0",
+        "bg-white",
+        "w-72",
+        "border",
+        "border-t-0",
+        "duration-500",
+      ];
+    },
   },
 };
 </script>
