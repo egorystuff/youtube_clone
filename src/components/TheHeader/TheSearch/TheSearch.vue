@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex mr-2 w-full h-full shadow-inner border border-gray-300 rounded-full focus:border-blue-700 focus:outline-none">
+    class="flex mr-2 w-full shadow-inner border border-gray-300 rounded-full focus:border-blue-700 focus:outline-none">
     <TheSearchInput />
     <TheSearchButton />
   </div>
