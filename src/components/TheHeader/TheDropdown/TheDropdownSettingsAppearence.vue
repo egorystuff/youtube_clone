@@ -4,10 +4,10 @@
   <section class="py-2">
     <div class="text-gray-500 text-xs p-3">Setting applies to this browser only</div>
     <ul>
-      <DropdownSettingListIten
-        v-for="(theme, themeId) in themes"
+      <DropdownSettingListItem
+        v-for="(themeName, themeId) in themes"
         :key="themeId"
-        :label="theme"
+        :label="themeName"
         :active="themeId === selectedThemeId"
         @click="selectedThemeId = themeId" />
     </ul>
@@ -15,12 +15,12 @@
 </template>
 
 <script>
-import DropdownSettingListIten from "./DropdownSettingListIten.vue";
+import DropdownSettingListItem from "./DropdownSettingListItem.vue";
 import DropdownSettingsHeader from "./DropdownSettingsHeader.vue";
 
 export default {
   components: {
-    DropdownSettingListIten,
+    DropdownSettingListItem,
     DropdownSettingsHeader,
   },
 

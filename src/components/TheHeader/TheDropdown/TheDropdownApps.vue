@@ -16,21 +16,21 @@
       <div v-show="isOpen" ref="dropdownApp" @keydown.esc="isOpen = false" tabindex="-1" :class="dropdownClasses">
         <section class="py-2">
           <ul>
-            <DropdownListIten label="YahTube TV" />
+            <DropdownListItem label="YahTube TV" />
           </ul>
         </section>
 
         <section class="py-2 border-b">
           <ul>
-            <DropdownListIten label="YahTube Music" />
-            <DropdownListIten label="YahTube Kids" />
+            <DropdownListItem label="YahTube Music" />
+            <DropdownListItem label="YahTube Kids" />
           </ul>
         </section>
 
         <section class="py-2 border-b">
           <ul>
-            <DropdownListIten label="Creator Academy" />
-            <DropdownListIten label="YahTube for Artist" />
+            <DropdownListItem label="Creator Academy" />
+            <DropdownListItem label="YahTube for Artist" />
           </ul>
         </section>
       </div>
@@ -39,13 +39,13 @@
 </template>
 
 <script>
-import DropdownListIten from "./DropdownListIten.vue";
+import DropdownListItem from "./DropdownListItem.vue";
 import BaseIcon from "../../BaseIcon.vue";
 import BaseTooltip from "../../BaseTooltip.vue";
 
 export default {
   components: {
-    DropdownListIten,
+    DropdownListItem,
     BaseIcon,
     BaseTooltip,
   },
