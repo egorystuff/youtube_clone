@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <BaseTooltip text="Settings">
-      <button @click="isOpen = !isOpen" class="relative p-2 focus:outline-none">
+      <button @click="toggle" class="relative p-2 focus:outline-none">
         <BaseIcon name="dotsVertical" class="w-5 h-5" />
       </button>
     </BaseTooltip>
@@ -13,53 +13,43 @@
       leave-active-class="transition ease-in duration-75"
       leave-from-class="transform opacity-100 scale-100"
       leave-to-class="transition opacity-0 scale-95">
-      <div v-show="isOpen" ref="dropdownSetting" @keydown.esc="isOpen = false" tabindex="-1" :class="dropdownClasses">
-        <section class="py-2 border-b">
-          <ul>
-            <DropdownSettingListIten
-              v-for="listItem in listItems.slice(0, 8)"
-              :key="listItem.label"
-              :label="listItem.label"
-              :icon="listItem.icon"
-              :with-sub-menu="listItem.withSubMenu" />
-          </ul>
-        </section>
-
-        <section class="py-2">
-          <ul>
-            <DropdownSettingListIten :label="listItems[8].label" :with-sub-menu="listItems[8].withSubMenu" />
-          </ul>
-        </section>
+      <div v-show="isOpen" ref="dropdownSetting" @keydown.esc="close" tabindex="-1" :class="dropdownClasses">
+        <TheDropdownSettingsMain v-if="selectedMenu === 'main'" @select-menu="showSelectedMenu" />
+        <TheDropdownSettingsAppearence v-else-if="selectedMenu === 'appearence'" @select-menu="showSelectedMenu" />
       </div>
     </Transition>
   </div>
 </template>
 
 <script>
-import DropdownSettingListIten from "./DropdownSettingListIten.vue";
+import TheDropdownSettingsMain from "./TheDropdownSettingsMain.vue";
+import TheDropdownSettingsAppearence from "./TheDropdownSettingsAppearence.vue";
 import BaseIcon from "../../BaseIcon.vue";
 import BaseTooltip from "../../BaseTooltip.vue";
 
 export default {
   components: {
-    DropdownSettingListIten,
+    TheDropdownSettingsMain,
     BaseIcon,
     BaseTooltip,
+    TheDropdownSettingsAppearence,
   },
 
   data() {
     return {
       isOpen: false,
-      listItems: [
-        { label: "Appearance: Light", icon: "sun", withSubMenu: true },
-        { label: "Language: English", icon: "translate", withSubMenu: true },
-        { label: "Location: Belarus", icon: "globeAlt", withSubMenu: true },
-        { label: "Settings", icon: "cog", withSubMenu: false },
-        { label: "Your data in YahTube", icon: "shieldCheck", withSubMenu: false },
-        { label: "Help", icon: "questionMarkCircle", withSubMenu: false },
-        { label: "Send feedback", icon: "chatAlt", withSubMenu: false },
-        { label: "Keyboard shortcuts", icon: "calculator", withSubMenu: false },
-        { label: "Restricted Mode: Off", icon: null, withSubMenu: true },
+      selectedMenu: "main",
+      dropdownClasses: [
+        "absolute",
+        "top-9",
+        "z-10",
+        "-right-full",
+        "sm:right-0",
+        "bg-white",
+        "w-72",
+        "border",
+        "border-t-0",
+        "duration-500",
       ],
     };
   },
@@ -73,25 +63,28 @@ export default {
   mounted() {
     window.addEventListener("click", (event) => {
       if (!this.$el.contains(event.target)) {
-        this.isOpen = false;
+        this.close();
       }
     });
   },
 
-  computed: {
-    dropdownClasses() {
-      return [
-        "absolute",
-        "top-9",
-        "z-10",
-        "-right-full",
-        "sm:right-0",
-        "bg-white",
-        "w-72",
-        "border",
-        "border-t-0",
-        "duration-500",
-      ];
+  methods: {
+    showSelectedMenu(selectedMenu) {
+      this.selectedMenu = selectedMenu;
+      this.$refs.dropdownSetting.focus();
+    },
+
+    toggle() {
+      this.isOpen ? this.close() : this.open();
+    },
+
+    open() {
+      this.isOpen = true;
+    },
+
+    close() {
+      this.isOpen = false;
+      setTimeout(() => (this.selectedMenu = "main"), 100);
     },
   },
 };

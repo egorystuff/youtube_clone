@@ -107,7 +107,7 @@ export default {
       if (window.innerWidth < 640) {
         this.isSmallScreen = true;
       } else {
-        closeMobileSearch();
+        this.closeMobileSearch();
         this.isSmallScreen = false;
       }
     },
