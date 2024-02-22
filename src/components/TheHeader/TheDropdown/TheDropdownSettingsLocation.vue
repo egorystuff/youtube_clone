@@ -1,68 +1,29 @@
 <template>
-  <DropdownSettingsHeader title="Choose your location" @back="$emit('select-menu', 'main')" />
+  <DropdownSettingsHeader title="Choose your location" @back="$emit('close')" />
 
   <section class="py-2">
     <ul class="max-h-96 overflow-auto">
       <DropdownSettingListItem
-        v-for="(location, locationId) in locations"
+        v-for="(locationName, locationId) in locations"
         :key="locationId"
-        :label="location"
-        :active="locationId === selectedOptions.locationId"
-        @click="selectOption(locationId)" />
+        :label="locationName"
+        :active="locationId === selectedOptions.location.id"
+        @click="selectOption({ id: locationId, text: locationName })" />
     </ul>
   </section>
 </template>
 
 <script>
-import DropdownSettingListItem from "./DropdownSettingListItem.vue";
-import DropdownSettingsHeader from "./DropdownSettingsHeader.vue";
+import dropdownSubmenu from "../../../mixins/dropdownSubmenu";
 
 export default {
-  components: {
-    DropdownSettingListItem,
-    DropdownSettingsHeader,
-  },
-
-  props: ["selected-options"],
-
-  emits: ["select-menu", "select-option"],
+  mixins: [dropdownSubmenu],
 
   data() {
     return {
-      selectedLocationId: 0,
-      locations: [
-        "United States",
-        "Russia",
-        "Belarus",
-        "United States",
-        "Russia",
-        "Belarus",
-        "United States",
-        "Russia",
-        "Belarus",
-        "United States",
-        "Russia",
-        "Belarus",
-        "United States",
-        "Russia",
-        "Belarus",
-        "United States",
-        "Russia",
-        "Belarus",
-        "United States",
-        "Russia",
-        "Belarus",
-        "United States",
-        "Russia",
-        "Belarus",
-      ],
+      optionName: "location",
+      locations: ["Belarus", "United States", "Russia"],
     };
-  },
-
-  methods: {
-    selectOption(locationId) {
-      this.$emit("select-option", { name: "locationId", value: locationId });
-    },
   },
 };
 </script>
