@@ -7,7 +7,7 @@
         :label="listItem.label"
         :icon="listItem.icon"
         :with-sub-menu="listItem.withSubMenu"
-        @click.stop="$emit('select-menu', listItem.id)" />
+        @click.stop="selectMenu(listItem)" />
     </ul>
   </section>
 
@@ -17,7 +17,7 @@
         :label="listItems[8].label"
         :icon="listItems[8].icon"
         :with-sub-menu="listItems[8].withSubMenu"
-        @click.stop="$emit('select-menu', listItems[8].id)" />
+        @click.stop="selectMenu(listItems[8])" />
     </ul>
   </section>
 </template>
@@ -30,7 +30,9 @@ export default {
     DropdownSettingListItem,
   },
 
-  emets: ["select-menu"],
+  props: ["selected-options"],
+
+  emits: ["select-menu", "select-option"],
 
   data() {
     return {
@@ -46,6 +48,12 @@ export default {
         { id: "restricted_mode", label: "Restricted Mode: Off", icon: null, withSubMenu: true },
       ],
     };
+  },
+
+  methods: {
+    selectMenu(listItem) {
+      if (listItem.withSubMenu) this.$emit("select-menu", listItem.id);
+    },
   },
 };
 </script>

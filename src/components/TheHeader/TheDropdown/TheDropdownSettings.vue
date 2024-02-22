@@ -14,13 +14,11 @@
       leave-from-class="transform opacity-100 scale-100"
       leave-to-class="transition opacity-0 scale-95">
       <div v-show="isOpen" ref="dropdownSetting" @keydown.esc="close" tabindex="-1" :class="dropdownClasses">
-        <TheDropdownSettingsMain v-if="selectedMenu === 'main'" @select-menu="showSelectedMenu" />
-        <TheDropdownSettingsAppearence v-else-if="selectedMenu === 'appearence'" @select-menu="showSelectedMenu" />
-        <TheDropdownSettingsLanguage v-else-if="selectedMenu === 'language'" @select-menu="showSelectedMenu" />
-        <TheDropdownSettingsLocation v-else-if="selectedMenu === 'location'" @select-menu="showSelectedMenu" />
-        <TheDropdownSettingsRestrictMode
-          v-else-if="selectedMenu === 'restricted_mode'"
-          @select-menu="showSelectedMenu" />
+        <component
+          :is="menu"
+          @select-menu="showSelectedMenu"
+          @select-option="selectOption"
+          :selected-options="selectedOptions" />
       </div>
     </Transition>
   </div>
@@ -50,6 +48,12 @@ export default {
     return {
       isOpen: false,
       selectedMenu: "main",
+      selectedOptions: {
+        themeId: 0,
+        languageId: 0,
+        locationId: 0,
+        restrictedMode: false,
+      },
       dropdownClasses: [
         "absolute",
         "top-9",
@@ -63,6 +67,20 @@ export default {
         "duration-500",
       ],
     };
+  },
+
+  computed: {
+    menu() {
+      const menuComponentsName = {
+        main: "TheDropdownSettingsMain",
+        appearence: "TheDropdownSettingsAppearence",
+        language: "TheDropdownSettingsLanguage",
+        location: "TheDropdownSettingsLocation",
+        restricted_mode: "TheDropdownSettingsRestrictMode",
+      };
+
+      return menuComponentsName[this.selectedMenu];
+    },
   },
 
   watch: {
@@ -83,6 +101,11 @@ export default {
     showSelectedMenu(selectedMenu) {
       this.selectedMenu = selectedMenu;
       this.$refs.dropdownSetting.focus();
+    },
+
+    selectOption(option) {
+      // { name: "themeId", value: themeId }
+      this.selectedOptions[option.name] = option.value;
     },
 
     toggle() {
