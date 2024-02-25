@@ -11,18 +11,13 @@
     </div>
 
     <!-- center -->
-    <TheSearchMobile v-if="isMobileSearchShown" @close="closeMobileSearch" />
+    <TheSearchMobile v-if="isMobileSearchShown" @close="closeMobileSearch">
+      <TheSearch :search-query="searchQuery" @update-search-query="searchQuery = $event" />
+    </TheSearchMobile>
 
-    <di
-      v-else
-      class="hidden sm:flex items-center justify-end p-2.5 pl-8 md:pl-12 md:px-8 flex-1 lg:px-0 lg:w-1/2 max-w-screen-md">
-      <TheSearch />
-      <BaseTooltip text="Search with your voice">
-        <button class="p-2 focus:outline-none">
-          <BaseIcon name="microphone" class="w-5 h-5" />
-        </button>
-      </BaseTooltip>
-    </di>
+    <TheSearchMain v-else>
+      <TheSearch :search-query="searchQuery" @update-search-query="searchQuery = $event" />
+    </TheSearchMain>
 
     <!-- right -->
     <div
@@ -66,6 +61,7 @@ import BaseTooltip from "../BaseTooltip.vue";
 import ButtonLogin from "../ButtonLogin.vue";
 import TheSearch from "./TheSearch/TheSearch.vue";
 import TheSearchMobile from "./TheSearch/TheSearchMobile.vue";
+import TheSearchMain from "./TheSearch/TheSearchMain.vue";
 
 export default {
   components: {
@@ -77,6 +73,7 @@ export default {
     ButtonLogin,
     BaseIcon,
     BaseTooltip,
+    TheSearchMain,
   },
 
   emits: {
@@ -85,6 +82,7 @@ export default {
 
   data() {
     return {
+      searchQuery: "",
       isSmallScreen: false,
       isMobileSearchActive: false,
       classes: ["flex", "justify-between", "w-full", "bg-white", "bg-opacity-95"],
