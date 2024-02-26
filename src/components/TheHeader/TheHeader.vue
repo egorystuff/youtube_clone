@@ -1,7 +1,7 @@
 <template>
   <header :class="classes">
     <!-- left -->
-    <div :class="['lg:w-1/4', 'flex', isMobileSearchShown ? 'opacity-0' : 'opacity-100']">
+    <div :class="leftSideClasses">
       <div class="flex items-center xl:w-64 xl:bg-white pl-4">
         <button class="mr-3 sm:ml-2 sm:mr-6 focus:outline-none">
           <BaseIcon @click="$emit('toggleSidebar')" name="menu" />
@@ -14,17 +14,7 @@
     <TheSearchWrapper v-show="isSearchShown" :is-small-screen="isSmallScreen" @close="closeMobileSearch" />
 
     <!-- right -->
-    <div
-      :class="[
-        'flex',
-        'items-center',
-        'justify-end',
-        'lg:w-1/4',
-        'sm:space-x-3',
-        'p-2',
-        'sm:px-4',
-        isMobileSearchShown ? 'opacity-0' : 'opacity-100',
-      ]">
+    <div :class="rightSideClasses">
       <BaseTooltip text="Search with your voice">
         <button class="sm:hidden p-2 focus:outline-none">
           <BaseIcon name="microphone" class="w-5 h-5" />
@@ -47,6 +37,7 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import TheDropdownApps from "./TheDropdown/TheDropdownApps.vue";
 import TheDropdownSettings from "./TheDropdown/TheDropdownSettings.vue";
 import LogoMain from "../LogoMain.vue";
@@ -64,6 +55,12 @@ export default {
     ButtonLogin,
     BaseIcon,
     BaseTooltip,
+  },
+
+  provide() {
+    return {
+      isMobileSearchActive: computed(() => this.isMobileSearchActive),
+    };
   },
 
   emits: {
@@ -85,6 +82,18 @@ export default {
 
     isMobileSearchShown() {
       return this.isSmallScreen && this.isMobileSearchActive;
+    },
+
+    leftSideClasses() {
+      return ["lg:w-1/4", "flex", this.opacity];
+    },
+
+    rightSideClasses() {
+      return ["flex", "items-center", "justify-end", "lg:w-1/4", "sm:space-x-3", "p-2", "sm:px-4", this.opacity];
+    },
+
+    opacity() {
+      return this.isMobileSearchShown ? "opacity-0" : "opacity-100";
     },
   },
 

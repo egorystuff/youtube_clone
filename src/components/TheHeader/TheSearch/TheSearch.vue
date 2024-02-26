@@ -70,15 +70,12 @@ export default {
   },
 
   mounted() {
-    document.addEventListener("click", this.handleClick);
-  },
-
-  beforeUnmount() {
-    document.removeEventListener("click", this.handleClick);
+    window.addEventListener("click", this.onClickAndResize);
+    window.addEventListener("resize", this.onClickAndResize);
   },
 
   methods: {
-    handleClick() {
+    onClickAndResize() {
       this.toggleSearchResults(false);
     },
 
@@ -144,7 +141,7 @@ export default {
     },
 
     selectSearchResult() {
-      this.query = this.activeSearchResultId ? this.results[this.activeSearchResultId] : this.query;
+      this.query = this.activeSearchResultId === null ? this.query : this.results[this.activeSearchResultId];
       this.toggleSearchResults(false);
       this.updateSearchResults();
     },
