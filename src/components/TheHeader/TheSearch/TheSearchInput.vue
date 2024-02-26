@@ -8,9 +8,9 @@
       :value="query"
       @input="updateQuery($event.target.value)"
       @focus="setState(true)"
-      @blur="setState(false)"
-      @keyup.esc="handkeEsc"
-      @click="setState(true)" />
+      @keyup.esc="handleEsc"
+      @click.stop="setState(true)"
+      @keydown.enter="handleEnter" />
 
     <button class="absolute top-0 right-0 h-full px-3 focus:outline-none" v-show="query" @click="clear">
       <BaseIcon name="x" class="w-5 h-5" />
@@ -28,7 +28,7 @@ export default {
 
   props: ["query", "hasResults"],
 
-  emits: ["update:query", "change-state"],
+  emits: ["update:query", "change-state", "enter"],
 
   data() {
     return {
@@ -78,13 +78,19 @@ export default {
       this.$emit("change-state", isActive);
     },
 
-    handkeEsc() {
+    handleEsc() {
       this.removeSelection();
       if (this.isActive && this.hasResults) {
         this.setState(false);
       } else {
         this.$refs.input.blur();
       }
+    },
+
+    handleEnter() {
+      this.setState(false);
+      this.$refs.input.blur();
+      this.$emit("enter");
     },
 
     removeSelection() {

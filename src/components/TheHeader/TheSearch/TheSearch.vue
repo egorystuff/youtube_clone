@@ -5,13 +5,23 @@
       <TheSearchInput
         v-model:query="query"
         :has-results="results.length"
+        @update:query="updateSearchResults"
         @change-state="toggleSearchResults"
         @keyup.up="handlePreviousSearchResult"
-        @keyup.down="handleNextSearchResult" />
-      <TheSearchResults v-show="isSearchResultsShown" :results="results" :active-result-id="activeSearchResultId" />
+        @keyup.down="handleNextSearchResult"
+        @enter="selectSearchResult"
+        @keydown.up.prevent />
+
+      <TheSearchResults
+        v-show="isSearchResultsShown"
+        :results="results"
+        :active-result-id="activeSearchResultId"
+        @search-result-mouseenter="activeSearchResultId = $event"
+        @search-result-mouseleave="activeSearchResultId = null"
+        @search-result-click="selectSearchResult" />
     </div>
 
-    <TheSearchButton />
+    <TheSearchButton @click.stop="selectSearchResult" />
   </div>
 </template>
 
@@ -27,13 +37,11 @@ export default {
     TheSearchResults,
   },
 
-  props: ["searchQuery"],
-
-  emits: ["update-search-query"],
-
   data() {
     return {
-      query: this.searchQuery,
+      results: [],
+      query: "",
+      activeQuery: "",
       isSearchResultsShown: false,
       activeSearchResultId: null,
       keywords: [
@@ -56,33 +64,45 @@ export default {
   },
 
   computed: {
-    results() {
-      if (!this.query) return [];
-
-      return this.keywords.filter((result) => {
-        return result.includes(this.trimmedQuery);
-      });
-    },
-
     trimmedQuery() {
       return this.query.replace(/\s+/g, " ").trim();
     },
   },
 
-  watch: {
-    query(query) {
-      this.$emit("update-search-query", query);
-    },
+  mounted() {
+    document.addEventListener("click", this.handleClick);
+  },
+
+  beforeUnmount() {
+    document.removeEventListener("click", this.handleClick);
   },
 
   methods: {
+    handleClick() {
+      this.toggleSearchResults(false);
+    },
+
+    updateSearchResults() {
+      this.activeSearchResultId = null;
+      this.activeQuery = this.query;
+
+      if (this.query === "") {
+        this.results = [];
+      } else {
+        this.results = this.keywords.filter((result) => {
+          return result.includes(this.trimmedQuery);
+        });
+      }
+    },
+
     toggleSearchResults(isSearchInputActive) {
-      this.isSearchResultsShown = isSearchInputActive && this.results.length;
+      this.isSearchResultsShown = isSearchInputActive && this.results.length > 0;
     },
 
     handlePreviousSearchResult() {
       if (this.isSearchResultsShown) {
         this.makePreviousSearchResultActive();
+        this.updateQueryWithSearchResult();
       } else {
         this.toggleSearchResults(true);
       }
@@ -91,6 +111,7 @@ export default {
     handleNextSearchResult() {
       if (this.isSearchResultsShown) {
         this.makeNextSearchResultActive();
+        this.updateQueryWithSearchResult();
       } else {
         this.toggleSearchResults(true);
       }
@@ -114,6 +135,18 @@ export default {
       } else {
         this.activeSearchResultId++;
       }
+    },
+
+    updateQueryWithSearchResult() {
+      const hasActiveSearchResult = this.activeSearchResultId !== null;
+
+      this.query = hasActiveSearchResult ? this.results[this.activeSearchResultId] : this.activeQuery;
+    },
+
+    selectSearchResult() {
+      this.query = this.activeSearchResultId ? this.results[this.activeSearchResultId] : this.query;
+      this.toggleSearchResults(false);
+      this.updateSearchResults();
     },
   },
 };
