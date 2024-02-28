@@ -11,12 +11,16 @@
     </div>
 
     <!-- center -->
-    <TheSearchWrapper v-show="isSearchShown" :is-small-screen="isSmallScreen" @close="closeMobileSearch" />
+    <TheSearchWrapper
+      v-show="isSearchShown"
+      :is-small-screen="isSmallScreen"
+      @close="closeMobileSearch"
+      @open-voice-modal="isVoiceModalOpen = true" />
 
     <!-- right -->
     <div :class="rightSideClasses">
       <BaseTooltip text="Search with your voice">
-        <button class="sm:hidden p-2 focus:outline-none">
+        <button class="sm:hidden p-2 focus:outline-none" @click="isVoiceModalOpen = true">
           <BaseIcon name="microphone" class="w-5 h-5" />
         </button>
       </BaseTooltip>
@@ -34,6 +38,10 @@
       <ButtonLogin />
     </div>
   </header>
+
+  <Teleport to="body">
+    <TheModalSearchWithVoice v-if="isVoiceModalOpen" @close="isVoiceModalOpen = false" />
+  </Teleport>
 </template>
 
 <script>
@@ -45,6 +53,7 @@ import BaseIcon from "../BaseIcon.vue";
 import BaseTooltip from "../BaseTooltip.vue";
 import ButtonLogin from "../ButtonLogin.vue";
 import TheSearchWrapper from "./TheSearch/TheSearchWrapper.vue";
+import TheModalSearchWithVoice from "../Modal/TheModalSearchWithVoice.vue";
 
 export default {
   components: {
@@ -55,6 +64,7 @@ export default {
     ButtonLogin,
     BaseIcon,
     BaseTooltip,
+    TheModalSearchWithVoice,
   },
 
   provide() {
@@ -71,6 +81,8 @@ export default {
     return {
       isSmallScreen: false,
       isMobileSearchActive: false,
+      isVoiceModalOpen: false,
+
       classes: ["flex", "justify-between", "w-full", "bg-white", "bg-opacity-95"],
     };
   },
