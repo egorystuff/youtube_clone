@@ -11,13 +11,17 @@
       <BaseModalOverlay v-if="isOpen" @click="close" />
     </Transition>
 
-    <div class="relative bg-white w-2/3 m-8" v-if="isOpen">
-      <div class="p-2 text-right">
+    <div class="relative bg-white w-full sm:w-2/3 m-8" v-if="isOpen">
+      <div class="p-2 text-right" v-if="withCloseButton">
         <BaseModalButtonClose @click="close" />
       </div>
 
       <div class="p-6">
         <slot />
+      </div>
+
+      <div v-if="$slots.footer" class="flex border-t border-gray-300 py-2">
+        <slot name="footer" :close="close" />
       </div>
     </div>
   </div>
@@ -33,12 +37,16 @@ export default {
     BaseModalOverlay,
   },
 
+  props: {
+    withCloseButton: Boolean,
+  },
+
   emits: ["close"],
 
   data() {
     return {
       isOpen: true,
-      classes: ["flex", "justify-center", "items-start", "fixed", "inset-0", "z-30", "focus:outline-none"],
+      classes: ["flex", "justify-center", "items-start", "fixed", "inset-0", "z-30", "focus:outline-none", "mx-auto"],
     };
   },
 
