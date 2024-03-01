@@ -7,17 +7,22 @@
         :id="index"
         :value="label"
         v-model="selectedSearchPredictions" />
+
       <label class="pl-4 cursor-pointer flex-grow" :for="index">{{ label }}</label>
+
+      <!-- <BaseCheckbox :id="index" :value="label" v-model="selectedSearchPredictions">
+        {{ label }}
+      </BaseCheckbox> -->
     </div>
   </div>
 </template>
 
 <script>
-import BaseModal from "./BaseModal.vue";
+import BaseCheckbox from "../BaseCheckbox.vue";
 
 export default {
   components: {
-    BaseModal,
+    BaseCheckbox,
   },
 
   props: { searchPredictions: Array, modelValue: Array },

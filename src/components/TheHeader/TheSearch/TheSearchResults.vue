@@ -16,7 +16,10 @@
     <a href="#" :class="reportLinkClasses" @click="openSearchPredictionsModal">Report search predictions</a>
 
     <Teleport to="body">
-      <TheModalSearchPredictions v-if="isSearchPredictionsModalOpen" @close="isSearchPredictionsModalOpen = false" />
+      <TheModalSearchPredictions
+        v-if="isSearchPredictionsModalOpen"
+        :search-predictions="results"
+        @close="isSearchPredictionsModalOpen = false" />
     </Teleport>
   </div>
 </template>
