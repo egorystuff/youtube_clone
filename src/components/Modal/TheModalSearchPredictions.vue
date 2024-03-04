@@ -4,6 +4,16 @@
 
     <TheSearchPredictionsList :search-predictions="searchPredictions" v-model="selectedSearchPredictions" />
 
+    <p class="text-xs text-gray-600 mt-5">The selected predictions are:</p>
+
+    <TheSearchPredictionsCategories
+      :categories="searchPredictionCategories"
+      v-model="selectedSearchPredictionCategory" />
+
+    <div class="text-black text-sm mt-6">
+      <BaseTextarea v-model="searchPredictionDetails" />
+    </div>
+
     <!-- можно вместо v-slot указать символ # -->
     <template v-slot:footer="slotProps">
       <BaseButton class="ml-auto" @click="slotProps.close"> Cancel </BaseButton>
@@ -15,13 +25,17 @@
 <script>
 import BaseModal from "./BaseModal.vue";
 import BaseButton from "../BaseButton.vue";
+import BaseTextarea from "../BaseTextarea.vue";
 import TheSearchPredictionsList from "./TheSearchPredictionsList.vue";
+import TheSearchPredictionsCategories from "./TheSearchPredictionsCategories.vue";
 
 export default {
   components: {
     BaseModal,
-    TheSearchPredictionsList,
     BaseButton,
+    BaseTextarea,
+    TheSearchPredictionsList,
+    TheSearchPredictionsCategories,
   },
 
   props: { searchPredictions: Array },
@@ -29,6 +43,15 @@ export default {
   data() {
     return {
       selectedSearchPredictions: [],
+      selectedSearchPredictionCategory: null,
+      searchPredictionDetails: "",
+      searchPredictionCategories: [
+        "Hateful",
+        "Sexually Explicit",
+        "Violent",
+        "Dangerous and harmful activity",
+        "Other",
+      ],
     };
   },
 };
