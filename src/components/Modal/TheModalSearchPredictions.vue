@@ -11,7 +11,7 @@
       v-model="selectedSearchPredictionCategory" />
 
     <div class="text-black text-sm mt-6">
-      <BaseTextarea v-model="searchPredictionDetails" />
+      <BaseTextarea v-model="searchPredictionDetails" :limit="500" />
     </div>
 
     <!-- можно вместо v-slot указать символ # -->

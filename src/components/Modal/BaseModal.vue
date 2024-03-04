@@ -11,12 +11,15 @@
       <BaseModalOverlay v-if="isOpen" @click="close" />
     </Transition>
 
-    <div class="relative bg-white w-full sm:w-2/3 m-8 overflou-auto" style="max-height: calc(100vh-64px)" v-if="isOpen">
+    <div
+      class="relative bg-white w-full sm:w-2/3 m-8 flex flex-col"
+      style="max-height: calc(100vh - 64px)"
+      v-if="isOpen">
       <div class="p-2 text-right" v-if="withCloseButton">
         <BaseModalButtonClose @click="close" />
       </div>
 
-      <div class="p-6">
+      <div class="p-6 overflow-auto">
         <slot />
       </div>
 
