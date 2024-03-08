@@ -1,5 +1,5 @@
 <template>
-  <button class="p-2 focus:outline-none">
+  <button class="p-2 focus:outline-none" data-testid="base-modal-button-close">
     <BaseIcon name="x" class="w-5 h-5" />
   </button>
 </template>
