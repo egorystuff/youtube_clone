@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/vue";
 import BaseCheckbox from "./BaseCheckbox.vue";
 
-test("renders checked base checkbox with label", () => {
+it("renders with label and checked", () => {
   const label = "Test Label";
 
   render(BaseCheckbox, {
@@ -20,7 +20,7 @@ test("renders checked base checkbox with label", () => {
   // expect(checkbox.checked).toBe(true);
 });
 
-test("renders unchecked base checkbox", () => {
+it("renders unchecked", () => {
   render(BaseCheckbox);
 
   expect(screen.getByRole("checkbox").checked).toBe(false);

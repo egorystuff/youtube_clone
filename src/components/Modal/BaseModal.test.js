@@ -20,6 +20,8 @@ function assertModalClosed(body) {
   return waitForElementToBeRemoved([screen.queryByText(body), screen.queryByTestId("base-modal-overlay")]);
 }
 
+const body = "This is modal body";
+
 //modificators ==========================================================================
 
 // test.only('renders modal with body and footer', () => {
@@ -31,88 +33,75 @@ function assertModalClosed(body) {
 // it.skip('renders modal with body and footer', () => {
 // xit('renders modal with body and footer', () => {
 
-//test ==========================================================================
+//tests ==========================================================================
 
-test("renders modal with body and footer", () => {
-  const body = "This is modal body";
-  const footer = "This is modal footer";
+describe("rendering", () => {
+  it("renders with body and footer", () => {
+    const footer = "This is modal footer";
 
-  renderModal(body, footer);
+    renderModal(body, footer);
 
-  screen.getByText(body);
-  screen.getByText(footer);
+    screen.getByText(body);
+    screen.getByText(footer);
+  });
+
+  it("renders with close button", () => {
+    const withCloseButton = true;
+
+    renderModal("", "", withCloseButton);
+
+    expect(screen.getByTestId("base-icon").innerHTML).toBe(icons["x"]);
+  });
+
+  it("renders without close button", () => {
+    const withCloseButton = false;
+
+    renderModal("", "", withCloseButton);
+
+    expect(screen.queryByTestId("base-icon")).toBeNull();
+  });
 });
 
-//test ==========================================================================
+//tests ==========================================================================
 
-test("renders modal with close button", () => {
-  const withCloseButton = true;
+describe("closing", () => {
+  it("closes when clicking close button", () => {
+    const withCloseButton = true;
 
-  renderModal("", "", withCloseButton);
+    renderModal(body, "", withCloseButton);
 
-  expect(screen.getByTestId("base-icon").innerHTML).toBe(icons["x"]);
-});
+    fireEvent.click(screen.getByTestId("base-modal-button-close"));
 
-//test ==========================================================================
+    return assertModalClosed(body);
+  });
 
-test("renders modal without close button", () => {
-  const withCloseButton = false;
+  it("closes when clicking overlay", () => {
+    renderModal(body);
 
-  renderModal("", "", withCloseButton);
+    fireEvent.click(screen.getByTestId("base-modal-overlay"));
 
-  expect(screen.queryByTestId("base-icon")).toBeNull();
-});
+    return assertModalClosed(body);
+  });
 
-//test ==========================================================================
+  it("closes when clicking cancel button in the footer", () => {
+    const footer = `
+      <template #footer="{ close }">
+        <button @click="close">Cancel</button>
+      </template>
+    `;
 
-test("closes modal when clicking close button", () => {
-  const body = "This is modal body";
-  const withCloseButton = true;
+    renderModal(body, footer);
 
-  renderModal(body, "", withCloseButton);
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
 
-  fireEvent.click(screen.getByTestId("base-modal-button-close"));
+    return assertModalClosed(body);
+  });
 
-  return assertModalClosed(body);
-});
+  it("closes when pressing esc key", () => {
+    renderModal(body);
 
-//test ==========================================================================
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "Esc" });
 
-test("closes modal when clicking overlay", () => {
-  const body = "This is modal body";
-
-  renderModal(body);
-
-  fireEvent.click(screen.getByTestId("base-modal-overlay"));
-
-  return assertModalClosed(body);
-});
-
-//test ==========================================================================
-
-test("closes modal when clicking cancel button in the footer", () => {
-  const body = "This is modal body";
-  const footer = `
-    <template #footer="{ close }">
-      <button @click="close">Cancel</button>
-    </template>
-  `;
-
-  renderModal(body, footer);
-
-  fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
-
-  return assertModalClosed(body);
-});
-
-//test ==========================================================================
-
-test("closes modal when pressing esc key", () => {
-  const body = "This is modal body";
-
-  renderModal(body);
-
-  fireEvent.keyDown(screen.getByRole("dialog"), { key: "Esc" });
-
-  return assertModalClosed(body);
+    return assertModalClosed(body);
+  });
 });

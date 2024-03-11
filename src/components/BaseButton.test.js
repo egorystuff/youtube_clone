@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/vue";
 import BaseButton from "./BaseButton.vue";
 
-test("renders base button", () => {
+it("renders with label", () => {
   //given (arrange)
   const options = {
     slots: { default: "Test button" },
