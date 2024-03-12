@@ -1,5 +1,8 @@
-import { render, screen, fireEvent } from "@testing-library/vue";
+import { render, screen } from "@testing-library/vue";
+import userEvent from "@testing-library/user-event";
 import BaseTooltip from "./BaseTooltip.vue";
+
+const user = userEvent.setup();
 
 const text = "Tooltip text";
 const buttonLabel = "Click Me";
@@ -29,15 +32,15 @@ function renderTooltip(text, element = "") {
 }
 
 function hoverOverOwningElement() {
-  return fireEvent.mouseEnter(getOwningElement());
+  return user.hover(getOwningElement());
 }
 
 function moveCursorAwayFromOwningElement() {
-  return fireEvent.mouseLeave(getOwningElement());
+  return user.unhover(getOwningElement());
 }
 
 function clickOwningElement() {
-  return fireEvent.click(getOwningElement());
+  return user.click(getOwningElement());
 }
 
 function getOwningElement() {
@@ -75,25 +78,23 @@ describe("showing", () => {
 //tests ==========================================================================
 
 describe("hiding", () => {
-  it("hides after moving cursor away from owning element", async () => {
+  beforeEach(async () => {
     renderTooltip(text, button);
 
     await hoverOverOwningElement();
 
     assertTooltipShown();
+  });
 
+  afterEach(() => {});
+
+  it("hides after moving cursor away from owning element", async () => {
     await moveCursorAwayFromOwningElement();
 
     assertTooltipHidden();
   });
 
   it("hides after clicking owning element", async () => {
-    renderTooltip(text, button);
-
-    await hoverOverOwningElement();
-
-    assertTooltipShown();
-
     await clickOwningElement();
 
     assertTooltipHidden();
