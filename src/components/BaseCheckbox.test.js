@@ -2,26 +2,25 @@ import { render, screen } from "@testing-library/vue";
 import BaseCheckbox from "./BaseCheckbox.vue";
 
 it("renders with label and checked", () => {
-  const label = "Test Label";
-
-  render(BaseCheckbox, {
+  const value = 1;
+  const label = "Test Checkbox";
+  const options = {
     props: {
       id: "checkbox",
-      value: 1,
-      modelValue: [1, 2, 3],
+      value,
+      modelValue: [value, 2, 3],
     },
     slots: {
       default: label,
     },
-  });
+  };
 
-  // const checkbox = screen.getByLabelText(label);
-
-  // expect(checkbox.checked).toBe(true);
+  render(BaseCheckbox, options);
+  expect(screen.getByLabelText(label)).toBeChecked();
 });
 
 it("renders unchecked", () => {
   render(BaseCheckbox);
 
-  expect(screen.getByRole("checkbox").checked).toBe(false);
+  expect(screen.getByRole("checkbox")).not.toBeChecked();
 });
